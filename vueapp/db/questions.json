@@ -1,0 +1,98 @@
+{
+    "questions": [
+        {
+            "question": "What is the full form of HTTP?",
+            "choices": [
+                { "choice": "Hyper text transfer package" },
+                { "choice": "Hyper text transfer protocol", "correct": true },
+                { "choice": "Hyphenation text test program" },
+                { "choice": "None of the above" }
+            ]
+        },
+        {
+            "question": "HTML document start and end with which tag pairs?",
+            "choices": [
+                { "choice": "HTML", "correct": true },
+                { "choice": "WEB" },
+                { "choice": "HEAD" },
+                { "choice": "BODY" }
+            ]
+        },
+        {
+            "question": "Which tag is used to create body text in HTML?",
+            "choices": [
+                { "choice": "HEAD" },
+                { "choice": "BODY", "correct": true },
+                { "choice": "TITLE" },
+                { "choice": "TEXT" }
+            ]
+        },
+        {
+            "question": "Outlook Express is _________",
+            "choices": [
+                { "choice": "E-Mail Client", "correct": true },
+                { "choice": "Browser" },
+                {
+                    "choice": "Search Engine"
+                },
+                { "choice": "None of the above" }
+            ]
+        },
+        {
+            "question": "What is a search engine?",
+            "choices": [
+                { "choice": "A hardware component " },
+                { "choice": "A machinery engine that search data" },
+                { "choice": "A web site that searches anything", "correct": true },
+                { "choice": "A program that searches engines" }
+            ]
+        },
+        {
+            "question":
+                "What does the .com domain represents?",
+            "choices": [
+                { "choice": "Network" },
+                { "choice": "Education" },
+                { "choice": "Commercial", "correct": true },
+                { "choice": "None of the above" }
+            ]
+        },
+        {
+            "question": "In Satellite based communication, VSAT stands for? ",
+            "choices": [
+                { "choice": " Very Small Aperture Terminal", "correct": true },
+                { "choice": "Varying Size Aperture Terminal " },
+                { "choice": "Very Small Analog Terminal" },
+                { "choice": "None of the above" }
+            ]
+        },
+        {
+            "question": "What is the full form of TCP/IP? ",
+            "choices": [
+                { "choice": "Telephone call protocol / international protocol" },
+                { "choice": "Transmission control protocol / internet protocol", "correct": true },
+                { "choice": "Transport control protocol / internet protocol " },
+                { "choice": "None of the above" }
+            ]
+        },
+        {
+            "question":
+                "What is the full form of HTML?",
+            "choices": [
+                { "choice": "Hyper text marking language" },
+                { "choice": "Hyphenation text markup language " },
+                { "choice": "Hyper text markup language", "correct": true },
+                { "choice": "Hyphenation test marking language" }
+            ]
+        },
+        {
+            "question": "\"Yahoo\", \"Infoseek\" and \"Lycos\" are _________?",
+            "choices": [
+                { "choice": "Browsers " },
+                { "choice": "Search Engines", "correct": true },
+                { "choice": "News Group" },
+                { "choice": "None of the above" }
+            ]
+        }
+        ]
+}
