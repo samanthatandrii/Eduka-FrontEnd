@@ -1,22 +1,56 @@
 <template>
-  <div class="question">
-    <div class="next"></div>
-    <div class="number">{{ number }}</div>
-    <div class="next"></div>
-    <div class="questionBox box">
-      <h4>{{ questions[number].question }}</h4>
-    </div>
-    <div class="answerBox box">
-      <div
-        class="option"
-        v-for="(choice, index) in questions[number].choices"
-        @click="selectAnswer(index)"
-        :class="{ 'is-selected': response[number] == index }"
-        :key="index"
-      >
-        {{ index | charIndex }}. {{ choice.choice }}
+  <div class="wrapper">
+    <div class="question">
+      <div class="pagination">
+        <div class="option" @click="backNumber()" :disabled="number < 0">
+          <font-awesome-icon :icon="['fas', 'chevron-left']" />
+        </div>
+        <div class="number">{{ number + 1 }}</div>
+        <div
+          class="option"
+          @click="nextNumber()"
+          :disabled="number > questions.length"
+        >
+          <font-awesome-icon :icon="['fas', 'chevron-right']" />
+        </div>
+      </div>
+
+      <div class="questionBox">
+        <h4>{{ questions[number].question }}</h4>
+      </div>
+      <div class="answerBox">
+        <div
+          class="options"
+          v-for="(choice, index) in questions[number].choices"
+          :key="index"
+        >
+          <div
+            class="option"
+            @click="selectAnswer(index)"
+            :class="{ selected: answer == index }"
+          >
+            {{ index | charIndex }}
+          </div>
+          <span>{{ choice.choice }}</span>
+        </div>
+      </div>
+
+      <div class="pagination">
+        <div class="option" @click="backNumber()" :disabled="number < 0">
+          <font-awesome-icon :icon="['fas', 'chevron-left']" />
+        </div>
+        <div class="number">{{ number + 1 }}</div>
+        <div
+          class="option"
+          @click="nextNumber()"
+          :disabled="number > questions.length"
+        >
+          <font-awesome-icon :icon="['fas', 'chevron-right']" />
+        </div>
       </div>
     </div>
+
+    <button @click="submitAnswer()">Submit</button>
   </div>
 </template>
 
@@ -29,7 +63,9 @@ export default {
     return {
       questions: [],
       number: 0,
-      response: []
+      response: [],
+      answer: 5,
+      score: 0
     };
   },
 
@@ -44,7 +80,7 @@ export default {
       const res = await axios.get(`http://localhost:3000/questions`);
       this.questions = res.data;
       this.number = 0;
-      this.response = Array(this.questions.length).fill(null);
+      this.response = Array(this.questions.length).fill(5);
     } catch (e) {
       console.error(e);
     }
@@ -53,13 +89,14 @@ export default {
   methods: {
     restart: function() {
       this.number = 0;
-      this.response = Array(this.questions.length).fill(false);
+      this.response = Array(this.questions.length).fill(5);
       console.log(this.response);
     },
 
     selectAnswer: function(choice) {
-      console.log(choice);
+      this.answer = choice;
       this.response[this.number] = choice;
+      console.log(this.answer == choice);
     },
 
     nextNumber: function() {
@@ -69,9 +106,24 @@ export default {
     },
 
     backNumber: function() {
-      if (this.number < 0) {
+      if (this.number > 0) {
         this.number--;
       }
+    },
+
+    postAnswer: function() {
+      axios
+        .post("http://localhost:3004/User", {
+          id: 1,
+          score: this.score,
+          answer: this.response
+        })
+        .then(resp => {
+          console.log(resp.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };
@@ -79,42 +131,67 @@ export default {
 
 <style scoped lang="scss">
 $orange: #e5792e;
+$lightOrange: #f9bc93;
 $grey: #f5f7f9;
 $space: 1rem;
-// $breakpoints: (
-//   phone: 640px,
-//   tablet: 768px,
-//   desktop: 1024px
-// ) !default;
 
-// @include media(">phone", "<tablet") {
-
-// }
-
-// @include media(">tablet", "<950px") {
-
-// }
-
-.box {
+.questionBox {
   border: 2px solid $grey;
   border-radius: 1rem;
   margin: $space;
   padding: $space;
-  width: 30rem;
+  width: 40%;
+  min-width: 15rem;
 }
 
-h3 {
-  margin: 40px 0 0;
+.answerBox {
+  width: 40%;
+  min-width: 15rem;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.options {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.option {
+  border: 2px solid $grey;
+  border-radius: 2rem;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: $space;
+  cursor: pointer;
+
+  &.selected {
+    border: 2px solid transparent;
+    background-color: $orange;
+    color: white;
+  }
+
+  &:hover {
+    border: 2px solid transparent;
+    background-color: $lightOrange;
+    color: white;
+  }
 }
-a {
-  color: #42b983;
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: 40%;
+  min-width: 15rem;
+  margin-bottom: 1rem;
+  left: 4rem;
+  position: relative;
+}
+
+.number {
+  margin: 5px 0;
 }
 </style>
