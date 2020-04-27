@@ -106,7 +106,7 @@ $grey: #eaebed;
 
 button {
   border: none;
-  font-size: 15px;
+  font-size: 25px;
   cursor: pointer;
   color: grey;
   background: transparent;

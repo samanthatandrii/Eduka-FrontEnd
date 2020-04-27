@@ -58,7 +58,7 @@
               class="numberQuestion"
               v-for="(answer, index) in response"
               :key="index"
-              :class="{ answered: answer < 5 }"
+              :class="{ answered: answer < 5, now: number == index }"
               @click="changeNumber(index)"
             >
               {{ index + 1 }}
@@ -84,7 +84,7 @@
         </h3>
         <div class="listOfAnswer">
           <ol>
-            <li v-for="(answer, index) in mock" :key="index">
+            <li v-for="(answer, index) in response" :key="index">
               <h4>
                 You answered
                 <span class="lightOrange">{{ answer | capitalize }}</span>
@@ -114,8 +114,7 @@ export default {
       answer: 5,
       score: 0,
       isModalVisible: false,
-      finished: true,
-      mock: [1, 2, 3, 2, 1, 1, 1, 0]
+      finished: false
     };
   },
 
@@ -443,8 +442,12 @@ h3 {
 
 .answered {
   border: transparent 2px solid;
-  background-color: $orange;
+  background-color: $orange !important;
   color: white;
+}
+
+.now {
+  background-color: $lightOrange;
 }
 
 $breakpoint-tablet: 660px;
