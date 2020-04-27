@@ -1,78 +1,101 @@
 <template>
   <div class="wrapper">
-    <div class="question">
-      <div class="pagination">
-        <div class="option" @click="backNumber()" :disabled="number < 0">
-          <font-awesome-icon :icon="['fas', 'chevron-left']" />
-        </div>
-        <div class="number">{{ number + 1 }}</div>
-        <div
-          class="option"
-          @click="nextNumber()"
-          :disabled="number > questions.length"
-        >
-          <font-awesome-icon :icon="['fas', 'chevron-right']" />
-        </div>
-      </div>
-
-      <div class="questionBox">
-        <h4>{{ questions[number].question }}</h4>
-      </div>
-      <div class="answerBox">
-        <div
-          class="options"
-          v-for="(choice, index) in questions[number].choices"
-          :key="index"
-          @click="selectAnswer(index)"
-        >
-          <div class="option" :class="{ selected: answer == index }">
-            {{ index | charIndex }}
+    <div class="wrapperTest" v-show="!finished">
+      <div class="question">
+        <div class="pagination">
+          <div class="option" @click="backNumber()" :disabled="number < 0">
+            <font-awesome-icon :icon="['fas', 'chevron-left']" />
           </div>
-          <span>{{ choice.choice }}</span>
-        </div>
-      </div>
-
-      <div class="pagination">
-        <div class="option" @click="backNumber()" :disabled="number < 0">
-          <font-awesome-icon :icon="['fas', 'chevron-left']" />
-        </div>
-        <div class="number">{{ number + 1 }}</div>
-        <div
-          class="option"
-          @click="nextNumber()"
-          :disabled="number > questions.length"
-        >
-          <font-awesome-icon :icon="['fas', 'chevron-right']" />
-        </div>
-      </div>
-    </div>
-
-    <div class="right">
-      <Timer />
-      <div class="Review">
-        <h3>Question Answered</h3>
-        <span>{{ answered() }} of {{ response.length }}</span>
-        <div class="listOfNumber">
+          <div class="number">{{ number + 1 }}</div>
           <div
-            class="numberQuestion"
-            v-for="(answer, index) in response"
-            :key="index"
-            :class="{ answered: answer < 5 }"
-            @click="changeNumber(index)"
+            class="option"
+            @click="nextNumber()"
+            :disabled="number > questions.length"
           >
-            {{ index + 1 }}
+            <font-awesome-icon :icon="['fas', 'chevron-right']" />
+          </div>
+        </div>
+
+        <div class="questionBox">
+          <h4>{{ questions[number].question }}</h4>
+        </div>
+        <div class="answerBox">
+          <div
+            class="options"
+            v-for="(choice, index) in questions[number].choices"
+            :key="index"
+            @click="selectAnswer(index)"
+          >
+            <div class="option" :class="{ selected: answer == index }">
+              {{ index | charIndex }}
+            </div>
+            <span>{{ choice.choice }}</span>
+          </div>
+        </div>
+
+        <div class="pagination">
+          <div class="option" @click="backNumber()" :disabled="number < 0">
+            <font-awesome-icon :icon="['fas', 'chevron-left']" />
+          </div>
+          <div class="number">{{ number + 1 }}</div>
+          <div
+            class="option"
+            @click="nextNumber()"
+            :disabled="number > questions.length"
+          >
+            <font-awesome-icon :icon="['fas', 'chevron-right']" />
           </div>
         </div>
       </div>
-      <button @click="showModal()">Review</button>
-      <button @click="postAnswer()">Submit</button>
+
+      <div class="right">
+        <Timer />
+        <div class="Review">
+          <h3>Question Answered</h3>
+          <span>{{ answered() }} of {{ response.length }}</span>
+          <div class="listOfNumber">
+            <div
+              class="numberQuestion"
+              v-for="(answer, index) in response"
+              :key="index"
+              :class="{ answered: answer < 5 }"
+              @click="changeNumber(index)"
+            >
+              {{ index + 1 }}
+            </div>
+          </div>
+        </div>
+        <button @click="showModal()">Review</button>
+        <button @click="postAnswer()">Submit</button>
+      </div>
+      <Modal
+        :result="response"
+        :answered="answered()"
+        v-show="isModalVisible"
+        @close="closeModal"
+      />
     </div>
-    <Modal
-      :result="response"
-      :answered="answered()"
-      v-show="isModalVisible"
-      @close="closeModal"
-    />
+
+    <div class="wrapperResult" v-show="finished">
+      <div class="result">
+        <h2>Result</h2>
+        <h3 class="resultScore">
+          Score {{ score }} out of {{ response.length }}
+        </h3>
+        <div class="listOfAnswer">
+          <ol>
+            <li v-for="(answer, index) in mock" :key="index">
+              <h4>
+                You answered
+                <span class="lightOrange">{{ answer | capitalize }}</span>
+              </h4>
+              <p class="lightOrange">The correct answer is:</p>
+              <p class="thin">{{ returnCorrectAnswer(index) }}</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -90,7 +113,9 @@ export default {
       response: [],
       answer: 5,
       score: 0,
-      isModalVisible: false
+      isModalVisible: false,
+      finished: true,
+      mock: [1, 2, 3, 2, 1, 1, 1, 0]
     };
   },
 
@@ -101,7 +126,19 @@ export default {
 
   filters: {
     charIndex: function(i) {
+      var r = "-";
+      if (i == 5) {
+        return r;
+      }
       return String.fromCharCode(97 + i);
+    },
+
+    capitalize: function(i) {
+      var r = "-";
+      if (i == 5) {
+        return r;
+      }
+      return String.fromCharCode(97 + i).toUpperCase();
     }
   },
 
@@ -165,7 +202,7 @@ export default {
         .catch(error => {
           console.log(error);
         });
-      //this.$router.push('Home');
+      this.showResult();
     },
 
     answered: function() {
@@ -190,12 +227,29 @@ export default {
       console.log(this.score);
     },
 
+    returnCorrectAnswer(num) {
+      for (let i = 0; i < this.questions[num].choices.length; i++) {
+        if (
+          typeof this.questions[num].choices[i] !== "undefined" &&
+          this.questions[num].choices[i].correct
+        ) {
+          return this.questions[num].choices[i].choice;
+        }
+      }
+      return null;
+    },
+
     showModal() {
       this.isModalVisible = true;
     },
 
     closeModal() {
       this.isModalVisible = false;
+    },
+
+    showResult() {
+      this.isModalVisible = false;
+      this.finished = true;
     }
   }
 };
@@ -205,9 +259,52 @@ export default {
 $orange: #e5792e;
 $lightOrange: #f9bc93;
 $grey: #eaebed;
+$blue: #7ed8ec;
 $space: 1rem;
 
-.wrapper {
+.wrapperResult {
+  padding: 3%;
+  background-color: #f5f7f9;
+  display: flex;
+  justify-content: center;
+}
+
+.result {
+  width: 95%;
+  background-color: white;
+  padding: $space;
+  border-radius: 1rem;
+  min-width: 15rem;
+  margin-top: 5rem;
+  text-align: center;
+}
+
+.listOfAnswer {
+  margin-top: 2rem;
+  margin-left: 1rem;
+  font-weight: bold;
+  text-align: left !important;
+
+  li {
+    margin-bottom: 1rem;
+  }
+}
+
+.lightOrange {
+  color: $orange;
+  font-weight: bold;
+  display: inline;
+}
+
+.thin {
+  font-weight: 300;
+}
+
+.resultScore {
+  margin: 1rem 0rem;
+}
+
+.wrapperTest {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

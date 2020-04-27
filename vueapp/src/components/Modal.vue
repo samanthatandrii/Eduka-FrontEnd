@@ -56,7 +56,7 @@ export default {
       if (i == 5) {
         return r;
       }
-      return String.fromCharCode(97 + i);
+      return String.fromCharCode(97 + i).toUpperCase();
     }
   },
 
