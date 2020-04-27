@@ -64,14 +64,22 @@
           </div>
         </div>
       </div>
+      <button @click="showModal()">Review</button>
       <button @click="postAnswer()">Submit</button>
     </div>
+    <Modal
+      :result="response"
+      :answered="answered()"
+      v-show="isModalVisible"
+      @close="closeModal"
+    />
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import Timer from "@/components/Timer.vue";
+import Modal from "@/components/Modal.vue";
 
 export default {
   name: "Question",
@@ -81,12 +89,14 @@ export default {
       number: 0,
       response: [],
       answer: 5,
-      score: 0
+      score: 0,
+      isModalVisible: false
     };
   },
 
   components: {
-    Timer
+    Timer,
+    Modal
   },
 
   filters: {
@@ -178,6 +188,14 @@ export default {
         }
       }
       console.log(this.score);
+    },
+
+    showModal() {
+      this.isModalVisible = true;
+    },
+
+    closeModal() {
+      this.isModalVisible = false;
     }
   }
 };
@@ -269,6 +287,7 @@ button {
   border: 2px solid $orange;
   background: $orange;
   color: white;
+  margin-bottom: 1rem;
 
   &:active {
     transform: scaleX(0.9);
