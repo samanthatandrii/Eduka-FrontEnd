@@ -17,3 +17,8 @@ json-server db/questions.json
 ```
 json-server db/user.json --port 3004
 ```
+
+note: before running all the command above change directory to vueapp first
+```
+cd vueapp
+```
