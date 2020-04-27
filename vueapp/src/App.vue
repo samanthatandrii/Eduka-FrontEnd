@@ -10,12 +10,16 @@
 </template>
 
 <style lang="scss">
+body{
+  background-color: #f5f7f9;
+}
+
 #app {
   @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap");
   font-family: "Open Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  color: #2c3e50;  
 }
 
 #nav {

@@ -23,12 +23,9 @@
           class="options"
           v-for="(choice, index) in questions[number].choices"
           :key="index"
+          @click="selectAnswer(index)"
         >
-          <div
-            class="option"
-            @click="selectAnswer(index)"
-            :class="{ selected: answer == index }"
-          >
+          <div class="option" :class="{ selected: answer == index }">
             {{ index | charIndex }}
           </div>
           <span>{{ choice.choice }}</span>
@@ -50,12 +47,31 @@
       </div>
     </div>
 
-    <button @click="submitAnswer()">Submit</button>
+    <div class="right">
+      <Timer />
+      <div class="Review">
+        <h3>Question Answered</h3>
+        <span>{{ answered() }} of {{ response.length }}</span>
+        <div class="listOfNumber">
+          <div
+            class="numberQuestion"
+            v-for="(answer, index) in response"
+            :key="index"
+            :class="{ answered: answer < 5 }"
+            @click="changeNumber(index)"
+          >
+            {{ index + 1 }}
+          </div>
+        </div>
+      </div>
+      <button @click="postAnswer()">Submit</button>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import Timer from "@/components/Timer.vue";
 
 export default {
   name: "Question",
@@ -67,6 +83,10 @@ export default {
       answer: 5,
       score: 0
     };
+  },
+
+  components: {
+    Timer
   },
 
   filters: {
@@ -84,6 +104,10 @@ export default {
     } catch (e) {
       console.error(e);
     }
+
+    setTimeout(() => {
+      this.postAnswer();
+    }, 100000);
   },
 
   methods: {
@@ -96,25 +120,31 @@ export default {
     selectAnswer: function(choice) {
       this.answer = choice;
       this.response[this.number] = choice;
-      console.log(this.answer == choice);
+      console.log(this.response[0]);
     },
 
     nextNumber: function() {
       if (this.number < this.questions.length) {
         this.number++;
+        this.answer = this.response[this.number];
       }
     },
 
     backNumber: function() {
       if (this.number > 0) {
         this.number--;
+        this.answer = this.response[this.number];
       }
     },
 
-    postAnswer: function() {
+    changeNumber: function(number) {
+      this.number = number;
+    },
+
+    async postAnswer() {
+      this.scoring();
       axios
-        .post("http://localhost:3004/User", {
-          id: 1,
+        .put("http://localhost:3004/User/2/", {
           score: this.score,
           answer: this.response
         })
@@ -124,6 +154,29 @@ export default {
         .catch(error => {
           console.log(error);
         });
+      //this.$router.push('Home');
+    },
+
+    answered: function() {
+      var total = 0;
+      for (let i=0; i<this.questions.length; i++) {
+        if (this.response[i] < 5) {
+          total++;
+        }
+      }
+      return total
+    },
+
+    scoring() {
+      for (let i = 0; i < this.response.length; i++) {
+        if (
+          typeof this.questions[i].choices[this.response[i]] !== "undefined" &&
+          this.questions[i].choices[this.response[i]].correct
+        ) {
+          this.score++;
+        }
+      }
+      console.log(this.score);
     }
   }
 };
@@ -132,20 +185,35 @@ export default {
 <style scoped lang="scss">
 $orange: #e5792e;
 $lightOrange: #f9bc93;
-$grey: #f5f7f9;
+$grey: #eaebed;
 $space: 1rem;
+
+.wrapper{
+  display: flex;
+  flex-wrap: wrap ;
+  justify-content: space-between;
+  padding: 3%;
+  background-color: #F5F7F9;
+}
+
+.question {
+  width: 60%;
+  background-color: white;
+  padding: 1%;
+  border-radius: 1rem;
+  min-width: 15rem;
+  margin-bottom: $space;
+}
 
 .questionBox {
   border: 2px solid $grey;
   border-radius: 1rem;
   margin: $space;
   padding: $space;
-  width: 40%;
-  min-width: 15rem;
+  min-width: 11rem;
 }
 
 .answerBox {
-  width: 40%;
   min-width: 15rem;
 }
 
@@ -184,14 +252,80 @@ $space: 1rem;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  width: 40%;
   min-width: 15rem;
   margin-bottom: 1rem;
-  left: 4rem;
-  position: relative;
 }
 
 .number {
   margin: 5px 0;
+}
+
+button {
+  width: 40%;
+  margin: auto;
+  padding: 1rem;
+  border-radius: 2rem;
+  border: 2px solid $orange;
+  background: $orange;
+  color:white;
+
+  &:active {
+    transform: scaleX(0.9);
+    transition-duration: 0.3s;
+  }
+
+  &:hover {
+    border: 2px solid $lightOrange;
+    background-color: $lightOrange;
+    transition-duration: 0.3s;
+  }
+}
+
+.right {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 15rem;
+}
+
+.Review {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-radius: $space;
+  margin-bottom: 30px;
+  background-color: white;
+  text-align: center;
+}
+
+h3 {
+  color:$orange;
+  margin: 0 0 1rem 0;
+}
+
+.listOfNumber {
+  display: flex;
+  flex-wrap:wrap;
+  justify-content: center;
+}
+
+.numberQuestion {
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 2rem;
+  border: $lightOrange 2px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 1rem 1rem 0rem;
+  cursor: pointer;
+}
+
+.answered {
+  border: transparent 2px solid;
+  background-color: $orange;
+  color: white;
 }
 </style>
