@@ -25,7 +25,7 @@
           <slot name="body" class="reviewList">
             <div class="review" v-for="(choice, index) in result" :key="index">
               <span class="number">{{ index + 1 }}</span>
-              {{ choice | charIndex }}
+              <span class="choice">{{ choice | charIndex }}</span>
             </div>
           </slot>
         </section>
@@ -140,6 +140,10 @@ h2 {
   align-items: center;
   margin: 1rem 1rem 1rem 0rem;
   cursor: pointer;
+}
+
+.choice {
+  font-weight: bold;
 }
 
 .blue {

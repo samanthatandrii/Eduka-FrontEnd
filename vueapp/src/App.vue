@@ -31,6 +31,7 @@ body {
   background-color: white;
   padding: 1rem 3%;
   position: fixed;
+  top: 0;
   height: 2.5rem;
   display: flex;
   justify-content: flex-start;

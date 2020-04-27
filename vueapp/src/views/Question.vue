@@ -2,17 +2,20 @@
   <div class="wrapper">
     <div class="wrapperTest" v-show="!finished">
       <div class="question">
-        <div class="pagination">
-          <div class="option" @click="backNumber()" :disabled="number < 0">
-            <font-awesome-icon :icon="['fas', 'chevron-left']" />
-          </div>
-          <div class="number">{{ number + 1 }}</div>
-          <div
-            class="option"
-            @click="nextNumber()"
-            :disabled="number > questions.length"
-          >
-            <font-awesome-icon :icon="['fas', 'chevron-right']" />
+        <div class="pagination start">
+          <h2>Test 1</h2>
+          <div class="pagination end">
+            <div class="option" @click="backNumber()" :disabled="number < 0">
+              <font-awesome-icon :icon="['fas', 'chevron-left']" />
+            </div>
+            <div class="number">{{ number + 1 }}</div>
+            <div
+              class="option"
+              @click="nextNumber()"
+              :disabled="number > questions.length"
+            >
+              <font-awesome-icon :icon="['fas', 'chevron-right']" />
+            </div>
           </div>
         </div>
 
@@ -33,7 +36,7 @@
           </div>
         </div>
 
-        <div class="pagination">
+        <div class="pagination end">
           <div class="option" @click="backNumber()" :disabled="number < 0">
             <font-awesome-icon :icon="['fas', 'chevron-left']" />
           </div>
@@ -153,7 +156,7 @@ export default {
 
     setTimeout(() => {
       this.postAnswer();
-    }, 100000);
+    }, 600000);
   },
 
   methods: {
@@ -366,9 +369,21 @@ $space: 1rem;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
   min-width: 15rem;
   margin-bottom: 1rem;
+
+  &.start {
+    justify-content: space-between;
+    align-items: baseline;
+
+    h2 {
+      margin-left: $space;
+    }
+  }
+
+  &.end {
+    justify-content: flex-end;
+  }
 }
 
 .number {

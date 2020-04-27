@@ -18,7 +18,7 @@ export default {
     return {
       timeLeft: "00:00",
       endTime: "0",
-      time: 100
+      time: 600
     };
   },
 
@@ -69,17 +69,14 @@ export default {
 };
 
 function zeroPadded(num) {
-  // 4 --> 04
   return num < 10 ? `0${num}` : num;
 }
 
 function hourConvert(hour) {
-  // 15 --> 3
   return hour % 12 || 12;
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 $orange: #e5792e;
 $lightOrange: #f9bc93;
