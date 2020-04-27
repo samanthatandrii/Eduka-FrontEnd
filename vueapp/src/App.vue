@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
+      <img src="@/assets/eduka.png" />
+      <router-link to="/">Home</router-link>
       <router-link to="/test">Test</router-link>
     </div>
     <router-view />
@@ -10,8 +10,13 @@
 </template>
 
 <style lang="scss">
-body{
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
   background-color: #f5f7f9;
+  padding: 0;
 }
 
 #app {
@@ -19,19 +24,36 @@ body{
   font-family: "Open Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;  
+  color: #2c3e50;
 }
 
 #nav {
-  padding: 30px;
+  background-color: white;
+  padding: 1rem 3%;
+  position: fixed;
+  height: 2.5rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  -webkit-box-shadow: 0px 7px 10px -3px rgba(179, 179, 179, 0.9);
+  -moz-box-shadow: 0px 7px 10px -3px rgba(179, 179, 179, 0.9);
+  box-shadow: 0px 7px 10px -3px rgba(179, 179, 179, 0.9);
+  margin-bottom: 1rem;
 
   a {
-    font-weight: bold;
     color: #2c3e50;
+    margin-right: 1rem;
+    text-decoration: none;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: #e5792e;
     }
+  }
+
+  img {
+    width: 8rem;
+    margin-right: 2rem;
   }
 }
 </style>

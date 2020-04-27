@@ -139,6 +139,7 @@ export default {
 
     changeNumber: function(number) {
       this.number = number;
+      this.answer = this.response[this.number];
     },
 
     async postAnswer() {
@@ -159,12 +160,12 @@ export default {
 
     answered: function() {
       var total = 0;
-      for (let i=0; i<this.questions.length; i++) {
+      for (let i = 0; i < this.questions.length; i++) {
         if (this.response[i] < 5) {
           total++;
         }
       }
-      return total
+      return total;
     },
 
     scoring() {
@@ -188,12 +189,12 @@ $lightOrange: #f9bc93;
 $grey: #eaebed;
 $space: 1rem;
 
-.wrapper{
+.wrapper {
   display: flex;
-  flex-wrap: wrap ;
+  flex-wrap: wrap;
   justify-content: space-between;
   padding: 3%;
-  background-color: #F5F7F9;
+  background-color: #f5f7f9;
 }
 
 .question {
@@ -202,7 +203,7 @@ $space: 1rem;
   padding: 1%;
   border-radius: 1rem;
   min-width: 15rem;
-  margin-bottom: $space;
+  margin-top: 5rem;
 }
 
 .questionBox {
@@ -267,7 +268,7 @@ button {
   border-radius: 2rem;
   border: 2px solid $orange;
   background: $orange;
-  color:white;
+  color: white;
 
   &:active {
     transform: scaleX(0.9);
@@ -287,6 +288,7 @@ button {
   flex-direction: column;
   justify-content: center;
   min-width: 15rem;
+  margin-top: 5rem;
 }
 
 .Review {
@@ -301,13 +303,13 @@ button {
 }
 
 h3 {
-  color:$orange;
+  color: $orange;
   margin: 0 0 1rem 0;
 }
 
 .listOfNumber {
   display: flex;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
   justify-content: center;
 }
 
@@ -327,5 +329,17 @@ h3 {
   border: transparent 2px solid;
   background-color: $orange;
   color: white;
+}
+
+$breakpoint-tablet: 660px;
+@media (max-width: $breakpoint-tablet) {
+  .question {
+    width: 100%;
+  }
+
+  .right {
+    width: 100%;
+    margin-top: 1rem;
+  }
 }
 </style>

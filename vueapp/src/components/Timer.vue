@@ -3,7 +3,9 @@
     <h3>
       {{ timeLeft }}
     </h3>
-    <p>Tryout akan selesai pada <span>{{ endTime }}</span></p>
+    <p>
+      Tryout akan selesai pada <span>{{ endTime }}</span>
+    </p>
   </div>
 </template>
 
@@ -14,17 +16,17 @@ export default {
   name: "Timer",
   data() {
     return {
-      timeLeft: '00:00',
-      endTime: '0',
-      time: 100,
+      timeLeft: "00:00",
+      endTime: "0",
+      time: 100
     };
   },
-  
+
   created() {
     clearInterval(intervalTimer);
     this.timer(this.time);
   },
-  
+
   methods: {
     timer(seconds) {
       const now = Date.now();
@@ -39,15 +41,15 @@ export default {
       intervalTimer = setInterval(() => {
         const secondsLeft = Math.round((end - Date.now()) / 1000);
 
-        if(secondsLeft === 0) {
+        if (secondsLeft === 0) {
           this.endTime = 0;
         }
 
-        if(secondsLeft < 0) {
+        if (secondsLeft < 0) {
           clearInterval(intervalTimer);
           return;
         }
-        this.displayTimeLeft(secondsLeft)
+        this.displayTimeLeft(secondsLeft);
       }, 1000);
     },
     displayTimeLeft(secondsLeft) {
@@ -61,8 +63,8 @@ export default {
       const hour = end.getHours();
       const minutes = end.getMinutes();
 
-      this.endTime = `${hourConvert(hour)}:${zeroPadded(minutes)}`
-    },
+      this.endTime = `${hourConvert(hour)}:${zeroPadded(minutes)}`;
+    }
   }
 };
 
@@ -73,7 +75,7 @@ function zeroPadded(num) {
 
 function hourConvert(hour) {
   // 15 --> 3
-  return (hour % 12) || 12;
+  return hour % 12 || 12;
 }
 </script>
 
@@ -86,7 +88,7 @@ $space: 1rem;
 
 .countdown {
   margin: 5px 0 30px;
-  border-radius: $space ;
+  border-radius: $space;
   background-color: white;
   padding: 4%;
   border-radius: 1rem;
@@ -97,7 +99,7 @@ h3 {
   align-items: baseline;
   justify-content: center;
   margin: 0px auto;
-  color: $orange
+  color: $orange;
 }
 p {
   display: flex;
@@ -109,7 +111,7 @@ p span {
   width: 70px;
   border-bottom: 2px solid $lightOrange;
   text-align: center;
-  margin-left: 5%
+  margin-left: 5%;
 }
 .time {
   display: flex;
